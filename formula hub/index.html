@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Formula Hub</title>
+
+  <!-- KaTeX -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css"
+  >
+
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js">
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <div class="nav-container">
+
+      <div class="logo">
+        <span>Formula</span> Hub
+      </div>
+
+      <div class="nav-links">
+        <a onclick="home()">หน้าแรก</a>
+        <a onclick="filterSubject('คณิตศาสตร์')">คณิตศาสตร์</a>
+        <a onclick="filterSubject('ฟิสิกส์')">ฟิสิกส์</a>
+        <a onclick="openCalculator()">เครื่องคิดเลข</a>
+        <a onclick="showFavorites()">รายการโปรด</a>
+      </div>
+
+      <button class="dark-btn" onclick="toggleDark()">
+        ◐
+      </button>
+
+    </div>
+  </nav>
+
+
+  <!-- ================= MAIN ================= -->
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+
+      <div class="hero-badge">
+        📚 Formula Library for Students
+      </div>
+
+      <h1>
+        <span>Formula</span> Hub
+      </h1>
+
+      <p>
+        รวมสูตรคณิตศาสตร์และฟิสิกส์ ครบ จบ ในที่เดียว
+      </p>
+
+      <!-- SEARCH -->
+      <div class="search-box">
+
+        <span>⌕</span>
+
+        <input
+          id="search"
+          type="text"
+          placeholder="ค้นหาสูตร เช่น ความเร็ว, พีทาโกรัส, Ohm..."
+          oninput="render()"
+        >
+
+        <button onclick="randomFormula()">
+          สุ่มสูตร
+        </button>
+
+      </div>
+
+
+      <!-- STATS -->
+      <div class="stats">
+
+        <div class="stat">
+          <strong>100</strong>
+          <span>สูตรทั้งหมด</span>
+        </div>
+
+        <div class="stat">
+          <strong>50</strong>
+          <span>คณิตศาสตร์</span>
+        </div>
+
+        <div class="stat">
+          <strong>50</strong>
+          <span>ฟิสิกส์</span>
+        </div>
+
+        <button
+          class="exam-btn"
+          onclick="showExam()">
+          🎯 สูตรที่ควรรู้ก่อนสอบ
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- CATEGORIES -->
+    <section class="section">
+
+      <div class="section-title">
+        <div>
+          <span class="small-title">EXPLORE</span>
+          <h2>หมวดหมู่ยอดนิยม</h2>
+        </div>
+      </div>
+
+      <div id="chips" class="chips"></div>
+
+    </section>
+
+
+    <!-- FORMULAS -->
+    <section class="section">
+
+      <div class="section-title">
+
+        <div>
+          <span class="small-title">FORMULAS</span>
+          <h2 id="resultTitle">
+            สูตรทั้งหมด
+          </h2>
+        </div>
+
+      </div>
+
+
+      <!-- FILTER -->
+      <div class="filters">
+
+        <select id="subject" onchange="render()">
+          <option value="">ทุกวิชา</option>
+          <option value="คณิตศาสตร์">คณิตศาสตร์</option>
+          <option value="ฟิสิกส์">ฟิสิกส์</option>
+        </select>
+
+        <select id="grade" onchange="render()">
+          <option value="">ทุกระดับ</option>
+          <option value="ม.1">ม.1</option>
+          <option value="ม.2">ม.2</option>
+          <option value="ม.3">ม.3</option>
+          <option value="ม.4">ม.4</option>
+          <option value="ม.5">ม.5</option>
+          <option value="ม.6">ม.6</option>
+        </select>
+
+        <select id="difficulty" onchange="render()">
+          <option value="">ทุกระดับความยาก</option>
+          <option value="ง่าย">ง่าย</option>
+          <option value="ปานกลาง">ปานกลาง</option>
+          <option value="ยาก">ยาก</option>
+        </select>
+
+      </div>
+
+
+      <div id="grid" class="formula-grid"></div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ================= MODAL ================= -->
+
+  <div
+    id="modal"
+    class="modal"
+    onclick="if(event.target===this) closeModal()">
+
+    <div class="modal-box">
+
+      <button
+        class="close-btn"
+        onclick="closeModal()">
+        ×
+      </button>
+
+      <div id="modalBody"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= FOOTER ================= -->
+
+  <footer>
+
+    <div class="footer-logo">
+      Formula Hub
+    </div>
+
+    <p>
+      คลังสูตรคณิตศาสตร์และฟิสิกส์
+      สำหรับนักเรียนระดับ ม.1–ม.6
+    </p>
+
+    <div class="footer-links">
+      <span onclick="home()">หน้าแรก</span>
+      <span onclick="filterSubject('คณิตศาสตร์')">คณิตศาสตร์</span>
+      <span onclick="filterSubject('ฟิสิกส์')">ฟิสิกส์</span>
+      <span onclick="openQuiz()">Quiz</span>
+      <span onclick="showFavorites()">รายการโปรด</span>
+    </div>
+
+    <small>
+      © 2026 Formula Hub
+    </small>
+
+  </footer>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
